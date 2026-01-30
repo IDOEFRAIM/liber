@@ -42,9 +42,7 @@ export default async function Navbar() {
                 <Link href="/reservations" className="text-sm font-medium text-gray-600 hover:text-indigo-600">
                   Mes Achats
                 </Link>
-                <Link href="/favorites" className="text-sm font-medium text-gray-600 hover:text-indigo-600">
-                  Favoris
-                </Link>
+            
               </div>
             )}
           </div>
