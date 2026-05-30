@@ -1,5 +1,5 @@
 {
-  "id": "66fb48d4-5d06-4507-ace4-d4040d3d150d",
+  "id": "e821e874-ca3e-48fd-bd0b-5653c94da6d0",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -12,8 +12,7 @@
           "name": "id",
           "type": "uuid",
           "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
+          "notNull": true
         },
         "name": {
           "name": "name",
@@ -86,8 +85,7 @@
           "name": "id",
           "type": "uuid",
           "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
+          "notNull": true
         },
         "name": {
           "name": "name",
@@ -101,6 +99,12 @@
           "primaryKey": false,
           "notNull": false
         },
+        "slug": {
+          "name": "slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
         "address": {
           "name": "address",
           "type": "text",
@@ -112,6 +116,20 @@
           "type": "text",
           "primaryKey": false,
           "notNull": false
+        },
+        "is_verified": {
+          "name": "is_verified",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "is_active": {
+          "name": "is_active",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
         },
         "owner_id": {
           "name": "owner_id",
@@ -152,6 +170,13 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
+        "shops_slug_unique": {
+          "name": "shops_slug_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "slug"
+          ]
+        },
         "shops_owner_id_unique": {
           "name": "shops_owner_id_unique",
           "nullsNotDistinct": false,
@@ -280,8 +305,16 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "user_id": {
-          "name": "user_id",
+        "status": {
+          "name": "status",
+          "type": "reservation_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'pending'"
+        },
+        "shop_id": {
+          "name": "shop_id",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
@@ -292,25 +325,11 @@
           "primaryKey": false,
           "notNull": true
         },
-        "status": {
-          "name": "status",
-          "type": "reservation_status",
-          "typeSchema": "public",
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
           "primaryKey": false,
-          "notNull": true,
-          "default": "'pending'"
-        },
-        "pickup_date": {
-          "name": "pickup_date",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "return_date": {
-          "name": "return_date",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "created_at": {
           "name": "created_at",
@@ -329,12 +348,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "reservations_user_id_users_id_fk": {
-          "name": "reservations_user_id_users_id_fk",
+        "reservations_shop_id_shops_id_fk": {
+          "name": "reservations_shop_id_shops_id_fk",
           "tableFrom": "reservations",
-          "tableTo": "users",
+          "tableTo": "shops",
           "columnsFrom": [
-            "user_id"
+            "shop_id"
           ],
           "columnsTo": [
             "id"
@@ -348,6 +367,19 @@
           "tableTo": "books",
           "columnsFrom": [
             "book_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "reservations_user_id_users_id_fk": {
+          "name": "reservations_user_id_users_id_fk",
+          "tableFrom": "reservations",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
           ],
           "columnsTo": [
             "id"
@@ -380,8 +412,9 @@
         "pending",
         "confirmed",
         "collected",
-        "returned",
-        "cancelled"
+        "completed",
+        "cancelled",
+        "returned"
       ]
     }
   },

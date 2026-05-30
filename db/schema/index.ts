@@ -22,7 +22,7 @@ export const usersRelations = relations(users, ({ one, many }) => ({
 export const shopsRelations = relations(shops, ({ one, many }) => ({
   // La boutique(user) appartient à UN propriétaire
   owner: one(users, {
-    fields: [shops.ownerId], // La Foreign Key est bien ici
+    fields: [shops.ownerId], // La Foreign Key 
     references: [users.id],
   }),
   books: many(books),
