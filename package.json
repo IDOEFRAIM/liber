@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "postinstall": "drizzle-kit generate",
     "dev": "next dev",
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit push",
